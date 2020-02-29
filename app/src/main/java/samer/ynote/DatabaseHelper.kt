@@ -14,9 +14,14 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(
     DATABASE_VERSION
 ) {
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(TABLE_CREATE) }
+        db.execSQL(TABLE_CREATE)
+    }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+    override fun onUpgrade(
+        db: SQLiteDatabase,
+        oldVersion: Int,
+        newVersion: Int
+    ) {
         if (oldVersion != newVersion) {
             val sql = "DROP TABLE IF EXISTS $TABLE_NOTES"
             db.execSQL(sql)
@@ -38,11 +43,8 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(
             //Add values to database w/ error handling:
             ID = database.insertOrThrow(TABLE_NOTES, null, values)
             database.setTransactionSuccessful()
-            Log.i(TAG, "NOTE ADDED")
         } catch (e: Exception) {
-            Log.e(TAG, "Unable to add item to database")
         } finally {
-            Log.d(TAG, "New Item: $note")
             database.endTransaction()
         }
         return ID
@@ -63,11 +65,8 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(
                 arrayOf(note.iD.toString())
             )
             database.setTransactionSuccessful()
-            Log.i(TAG, "ITEM UPDATED")
         } catch (e: Exception) {
-            Log.e(TAG, "Unable to UPDATE item to database")
         } finally {
-            Log.d(TAG, note.toString())
             database.endTransaction()
         }
     }
@@ -101,10 +100,7 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(
                 arrayOf(ID.toString())
             )
             database.setTransactionSuccessful()
-            Log.i(TAG, "NOTE DELETED")
-            Log.d(TAG, note.toString())
         } catch (e: Exception) {
-            Log.d(TAG, "Unable to delete note")
         } finally {
             database.endTransaction()
         }
@@ -126,36 +122,18 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(
                         note.title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE))
                         note.note = cursor.getString(cursor.getColumnIndex(COLUMN_NOTE))
                         note.timestamp = cursor.getString(cursor.getColumnIndex(COLUMN_TIMESTAMP))
-                        list_items.add(note)
-                        Log.i(
-                            TAG,
-                            note.toString()
-                        ) //print note to console
+                        list_items.add(note) //print note to console
                     } while (cursor.moveToNext())
                 }
             } catch (e: Exception) {
-                Log.d(
-                    TAG,
-                    "Unable to get data from local database"
-                )
+
             } finally {
-                Log.i(
-                    TAG,
-                    "Total rows (# of fields) = " + cursor!!.count
-                )
-                Log.d(TAG, list_items.toString())
                 //check if cursor is closed, if not > close
                 if (cursor != null && !cursor.isClosed) {
                     cursor.close()
-                    Log.i(TAG, "Cursor is closed")
                 }
             }
             database.close()
-            Log.d(TAG, "VIP_DB: " + list_items.size)
-            Log.d(
-                TAG,
-                "VIP_DB_ListFromDB: $list_items"
-            )
             return list_items
         }
 
@@ -166,10 +144,6 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(
             database.delete(TABLE_NOTES, null, null)
             database.setTransactionSuccessful()
         } catch (e: Exception) {
-            Log.d(
-                TAG,
-                "Unable to delete all notes from database"
-            )
         } finally {
             database.endTransaction()
         }

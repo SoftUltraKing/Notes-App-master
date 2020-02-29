@@ -40,9 +40,7 @@ class NoteEditorActivity : AppCompatActivity() {
                 count: Int,
                 after: Int
             ) { //Calls checkTitleLength
-                note!!.title = charSequence.toString()
-                Log.i(TAG, "Title: $charSequence")
-            }
+                note!!.title = charSequence.toString() }
 
             override fun afterTextChanged(editable: Editable) {}
         })
@@ -63,9 +61,7 @@ class NoteEditorActivity : AppCompatActivity() {
                 count: Int,
                 after: Int
             ) {
-                note!!.note = charSequence.toString()
-                Log.i(TAG, "Note: :$charSequence")
-            }
+                note!!.note = charSequence.toString() }
 
             override fun afterTextChanged(editable: Editable) {}
         })
@@ -73,13 +69,8 @@ class NoteEditorActivity : AppCompatActivity() {
 
     //Returns note and navigates back to MainActivity:
     override fun onBackPressed() {
-        Log.i(TAG, "onBackPressed Called")
         val returnIntent = Intent()
-        returnIntent.putExtra("note", note)
-        Log.d(
-            TAG,
-            "putExtra: " + note.toString()
-        ) //TODO REMOVE after testing
+        returnIntent.putExtra("note", note) //TODO REMOVE after testing
         setResult(Activity.RESULT_OK, returnIntent)
         finish()
     }
